@@ -29,6 +29,7 @@ function on_research_cancelled(event)
     event_json["tick"] = event.tick
     for k, _ in pairs(event.research) do
         event_json["name"] = get_infinite_research_name(k)
+        event_json["level"] = k.level or "no-level"
         write_game_event_json(event_json)
         factorio_log(event_json["event"], event_json["name"])
     end
