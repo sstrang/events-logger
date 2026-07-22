@@ -3,7 +3,7 @@
   "version": "@@VERSION@@",
   "title": "Events Logger",
   "author": "James Boylan",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "homepage": "https://github.com/Ralnoc/factorio-events-logger",
   "dependencies": ["base", "space-age"]
 }
