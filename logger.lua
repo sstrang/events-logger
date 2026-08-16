@@ -23,8 +23,8 @@ logging.on_nth_tick = {
     [60 * 60 * 10] = function()
         -- every 10 minutes
         log_stats()
+        checkEvolution()
     end,
-    [60 * 60 * 10] = checkEvolution,
     [60 * 60] = log_tick_over_time,
 }
 

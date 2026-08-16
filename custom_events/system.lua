@@ -23,21 +23,21 @@ function log_stats()
     for _, p in pairs(game.players)
     do
         event_json["name"] = p.name
-        event_json["event"] = "STATS"
-        event_json["stats"] = {
-            ["online_time"] = p.online_time,
-            [pdat[1]] = (p.online_time - pdat[2])
-        }
         local pdat = storage.playerstats[event_json["name"]]
         if (pdat == nil) then
             -- format of array: {entities placed, ticks played}
-            event_json["stats"]["online_time"] = p.online_time
+            event_json["stats"] = {
+                ["online_time"] = p.online_time
+            }
             write_game_event_json(event_json)
             factorio_log(event_json["event"], event_json["name"] .. " " .. 0 .. " " .. event_json["stats"]["online_time"])
             storage.playerstats[event_json["name"]] = { 0, event_json["stats"]["online_time"] }
         else
+            event_json["stats"] = {
+                ["online_time"] = p.online_time,
+                [pdat[1]] = (p.online_time - pdat[2])
+            }
             if (pdat[1] ~= 0 or (p.online_time - pdat[2]) ~= 0) then
-                event_json["stats"][pdat[1]] = (p.online_time - pdat[2])
                 write_game_event_json(event_json)
                 factorio_log(event_json["event"], event_json["name"] .. " " .. pdat[1] .. " " .. event_json["stats"][pdat[1]])
             end
