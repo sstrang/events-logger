@@ -2,7 +2,7 @@ function on_console_chat(event)
     local event_json = {}
     event_json["event"] = "CHAT"
     event_json["tick"] = event.tick
-    if ( event.player_index ~= nul and event.player_index ~= '' ) then
+    if ( event.player_index ~= nil and event.player_index ~= '' ) then
         local player = game.get_player(event.player_index)
         event_json["name"] = player.name
         event_json["message"] = event.message
@@ -58,3 +58,5 @@ function log_tick_over_time()
     factorio_log(event_json["event"], "tick_paused: " .. event_json["tick_paused"])
     factorio_log(event_json["event"], "ticks_to_run: " .. event_json["ticks_to_run"])
 end
+
+events[defines.events.on_console_chat] = on_console_chat

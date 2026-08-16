@@ -75,7 +75,11 @@ function on_rocket_launched(event)
     end
     event_json["tick"] = event.tick
     write_game_event_json(event_json)
-    factorio_log(event_json["event"], " from " .. event_json["silo"]["name"] .. " at " .. event_json["silo"]["position"]["x"] .. ", " .. event_json["silo"]["position"]["y"])
+    if event.rocket_silo then
+        factorio_log(event_json["event"], " from " .. event_json["silo"]["name"] .. " at " .. event_json["silo"]["position"]["x"] .. ", " .. event_json["silo"]["position"]["y"])
+    else
+        factorio_log(event_json["event"], " with no rocket silo recorded")
+    end
 end
 
 events[defines.events.on_cargo_pod_finished_ascending] = on_cargo_pod_finished_ascending

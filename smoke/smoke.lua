@@ -98,6 +98,7 @@ local G = {
             on_player_banned = 63, on_player_unbanned = 64, on_character_corpse_expired = 65,
             on_picked_up_item = 66, on_player_repaired_entity = 67,
             on_achievement_gained = 70, on_trigger_fired_artillery = 71,
+            on_console_chat = 72,
         },
         inventory = { cargo_unit = 52 },
         disconnect_reason = {
@@ -182,6 +183,7 @@ local expected_handlers = {
     "on_player_banned", "on_player_unbanned", "on_character_corpse_expired",
     "on_picked_up_item", "on_player_repaired_entity",
     "on_achievement_gained", "on_trigger_fired_artillery",
+    "on_console_chat",
 }
 for _, evname in ipairs(expected_handlers) do
     if handlers[G.defines.events[evname]] then pass("handler registered: " .. evname)
@@ -296,6 +298,11 @@ fire("on_rocket_launched", {
     tick = 520,
     rocket_silo = { name = "rocket-silo", position = { x = 0.5, y = 0.5 } },
 })
+fire("on_rocket_launched", {
+    case = "no silo (nil rocket_silo must not crash factorio_log)",
+    tick = 525,
+    rocket_silo = nil,
+})
 
 fire("on_pre_player_died", { case = "ambient death", tick = 600, player_index = 2 })
 fire("on_pre_player_died", { case = "PvE death", tick = 605, player_index = 2,
@@ -320,6 +327,9 @@ fire("on_achievement_gained", { case = "achievement", tick = 930, name = 70, pla
     achievement = { name = "steam-all-the-way" } })
 fire("on_trigger_fired_artillery", { case = "artillery", tick = 940,
     entity = { name = "artillery-turret" }, source = { name = "artillery-turret" } })
+
+fire("on_console_chat", { case = "player chat", tick = 950, player_index = 1, message = "hello world" })
+fire("on_console_chat", { case = "server console (nil player_index)", tick = 955, player_index = nil, message = "/command ran" })
 
 -- ---------------------------------------------------------------------------
 -- nth-tick paths
@@ -349,7 +359,7 @@ if wrote == 4 then pass("nth-tick JSON volume as expected (3 stats/evolution + 1
 else fail("nth-tick JSON volume: expected 4 lines, got " .. wrote) end
 
 ok, err = pcall(G.on_console_chat, { tick = 999, player_index = 1, message = "hello" })
-if ok then pass("on_console_chat callable (but NOT registered in events table)")
+if ok then pass("on_console_chat callable and registered (CHAT events fire)")
 else fail("on_console_chat: " .. tostring(err)) end
 
 -- ---------------------------------------------------------------------------
